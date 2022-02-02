@@ -38,7 +38,9 @@
             <h4>Current Reservations</h4>
           </div>
           <div class="card-body">
-            <ul id="tableList" class="list-group"></ul>
+            <ul id="tableList" class="list-group">
+
+            </ul>
           </div>
         </div>
 
@@ -48,7 +50,9 @@
             <h4>Waiting List</h4>
           </div>
           <div class="card-body">
-            <ul id="waitList" class="list-group"></ul>
+            <ul id="waitList" class="list-group">
+
+            </ul>
           </div>
         </div>
       </div>
@@ -71,7 +75,54 @@
 <!-- BELOW CODE IS CRITICAL. IT HANDLES HOW FORM DATA IS LOADED FROM OUR SERVER -->
 <script type="text/javascript">
 
+$(() => {
 
+  $.ajax({
+    method: "GET",
+    url: "/api/tables",
+    success: (data) => {
+      data.forEach((table, index) => {
+        $("#tableList").append(
+            $('<li/>', { class: "list-group-item mt-4" }).append(
+              $('<h2/>', { text: `Table #${index+1}` }),
+              $('<hr/>'),
+              $('<h2/>', { text: `ID: ${table.customerID}` }),
+              $('<h2/>', { text: `Name: ${table.customerName}` }),
+              $('<h2/>', { text: `Email: ${table.customerEmail}` }),
+              $('<h2/>', { text: `Phone: ${table.phoneNumber}` }),
+            )
+        );    
+      });
+    }
+  });
+
+  $.ajax({
+    method: "GET",
+    url: "/api/waitlist",
+    success: (data) => {
+      data.forEach((table, index) => {
+        $("#waitList").append(
+            $('<li/>', { class: "list-group-item mt-4" }).append(
+              $('<h2/>', { text: `Table #${index+1}` }),
+              $('<hr/>'),
+              $('<h2/>', { text: `ID: ${table.customerID}` }),
+              $('<h2/>', { text: `Name: ${table.customerName}` }),
+              $('<h2/>', { text: `Email: ${table.customerEmail}` }),
+              $('<h2/>', { text: `Phone: ${table.phoneNumber}` }),
+            )
+        );    
+      });
+    }
+  });
+
+  $("#clear").on("click", () => {
+    $.ajax({
+      method: "POST",
+      url: "/api/clear",
+      success: () => {window.location.reload(true);}
+    });
+  });
+});
 
 
 </script>
